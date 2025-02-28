@@ -1,0 +1,11 @@
+.form-div {
+    margin: 40px auto;
+    max-width: 350px;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 15px;
+}
+
+.login-btn {
+    margin: 10px auto;
+}

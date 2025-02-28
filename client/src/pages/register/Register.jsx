@@ -1,14 +1,28 @@
 import { Form, Button, Alert } from 'react-bootstrap';
 import { Link } from "react-router-dom";
-import './login.css';
+import './register.css';
 
-export default function Login() {
+export default function Register() {
     return (
         <>
             <div className='outer-div'>
-                <h1 className='title-of-page'>Login</h1>
+                <h1 className='title-of-page'>Sign Up</h1>
                 <div className="form-div">
                     <Form>
+                        <Form.Group>
+                            <Form.Label>
+                                <strong>Username</strong>
+                            </Form.Label>
+                            <Form.Control
+                                type='text'
+                                placeholder='Enter your username'
+                                name='username'
+                                className='form-control'
+                                required
+                            />
+                            <Form.Control.Feedback type='invalid'>Username is required!</Form.Control.Feedback>
+                        </Form.Group>
+
                         <Form.Group>
                             <Form.Label>
                                 <strong>Email</strong>
@@ -42,14 +56,14 @@ export default function Login() {
                                 type='submit'
                                 className='login-btn btn btn-success rounded'
                             >
-                                Login
+                                Sign Up
                             </Button>
                         </div>
 
                         <div className="text-center">
-                            <p>Don't have an account?</p>
-                            <Link to='/signup'>
-                                <Button>Sign-up</Button>
+                            <p>Already have an account?</p>
+                            <Link to='/login'>
+                                <Button>Login</Button>
                             </Link>
                         </div>
                     </Form>
