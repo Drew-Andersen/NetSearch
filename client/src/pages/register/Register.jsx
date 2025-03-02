@@ -43,7 +43,7 @@ export default function Register() {
                             </Form.Label>
                             <Form.Control
                                 type='password'
-                                placeholder='Enter yuor password'
+                                placeholder='Enter your password'
                                 name='password'
                                 className='form-control'
                                 required
