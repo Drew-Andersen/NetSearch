@@ -1,4 +1,4 @@
-import decode from 'jwt-decode';
+import * as decode from 'jwt-decode';
 
 class AuthService {
     loggedIn() {
@@ -20,4 +20,11 @@ class AuthService {
             return false;
         }
     }
+
+    logout() {
+        localStorage.removeItem('id_token');
+        window.location.assign('/');
+    }
 }
+
+export default new AuthService();
