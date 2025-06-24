@@ -7,7 +7,7 @@ export default function SearchBar({ onSearch }) {
     const [query, setQuery] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [severity, setSeverity] = useState('');
+    const [severity, setSeverity] = useState('all');
 
     const queryInfoRef = useRef(null);
 
@@ -19,10 +19,15 @@ export default function SearchBar({ onSearch }) {
         e.preventDefault();
         onSearch({ 
             query, 
-            startDate: startDate ? startDate.toISOString().split('T')[0] : '', 
-            endDate: endDate ? endDate.toISOString().split('T')[0] : '', 
+            startDate: startDate ? startDate.toISOString() : '', 
+            endDate: endDate ? endDate.toISOString() : '', 
             severity 
         });
+
+        setQuery('');
+        setStartDate(null);
+        setEndDate(null);
+        setSeverity('all');
     }
 
     return(
@@ -41,6 +46,7 @@ export default function SearchBar({ onSearch }) {
 
                 <div className="col-md-2 d-flex justify-content-center align-items-center gap-2">
                     <DatePicker 
+                        maxDate={new Date()}
                         selected={startDate}
                         onChange={(date) => setStartDate(date)}
                         customInput={
@@ -54,6 +60,7 @@ export default function SearchBar({ onSearch }) {
 
                 <div className="col-md-2 d-flex justify-content-center align-items-center gap-2">
                     <DatePicker 
+                        maxDate={new Date()}
                         selected={endDate}
                         onChange={(date) => setEndDate(date)}
                         customInput={

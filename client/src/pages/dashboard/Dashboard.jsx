@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "../../components/SearchBar";
 import LogTable from "../../components/LogTable";
 
@@ -6,20 +6,61 @@ import './dashboard.css';
 
 export default function Dashboard() {
     const [logs, setLogs] = useState([]);
+    const [sortedConfig, setSortedConfig] = useState({ key: 'timestamp', direction: 'desc'});
+
+    useEffect(() => {
+        fetch('http://localhost:3001/api/logs/search?q=login&severity=ERROR')
+            .then((res) => res.json())
+            .then((data) => {
+                setLogs(data.logs)
+            })
+            .catch((err) => console.error('Failed to load logs:', err))
+    }, []);
+
+    const sortedLogs = [...logs].sort((a, b) => {
+        if (!sortedConfig.key) return 0;
+
+        const aVal = a[sortedConfig.key];
+        const bVal = b[sortedConfig.key];
+
+        if (aVal < bVal) return sortedConfig.direction === 'asc' ? -1 : 1;
+        if (aVal > bVal) return sortedConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+    });
 
     const handleSearch = async (filters) => {
-        // Add startDate, endDate to the filters
-        const { query, severity } = filters
+        const { query, startDate, endDate, severity } = filters
 
-        const mockLogs = [
-            {
-                timestamp: new Date().toISOString(),
-                host: 'web-server-1',
-                severity: severity === 'all' ? 'INFO' : severity,
-                message: `Mock log matching "${query}"`,
-            },
-        ];
-        setLogs(mockLogs)
+        const params = new URLSearchParams();
+        if (query) params.append('q', query);
+        if (severity && severity !== 'all') params.append('severity', severity);
+        if (startDate && endDate) {
+            params.append('startDate', startDate);
+            params.append('endDate', endDate);
+        }
+
+        try {
+            const res = await fetch('http://localhost:3001/api/logs/search?${params}');
+            const data = await res.json();
+            setLogs(data.logs);
+        } catch (err) {
+            console.log('Search failed:', err);
+        }
+
+        console.log(filters);
+    }
+
+    const handleSort = (key) => {
+        setSortedConfig(prev => {
+            if (prev.key === key) {
+                return {
+                    key,
+                    direction: prev.direction === 'asc' ? 'desc' : 'asc'
+                }
+            } else {
+                return { key, direction: 'asc' };
+            }
+        })
     }
 
     return(
@@ -28,7 +69,7 @@ export default function Dashboard() {
                 <div className="mt-5 w-100">
                     <h1 className="text-primary my-3">NetSearch Dashboard</h1>
                     <SearchBar onSearch={handleSearch } />
-                    <LogTable logs={logs} />
+                    <LogTable logs={sortedLogs} onSort={handleSort} sortedConfig={sortedConfig} />
                 </div>
             </div>
         </>

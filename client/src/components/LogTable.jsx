@@ -1,11 +1,15 @@
-export default function LogTable ({ logs }) {
+export default function LogTable ({ logs, onSort, sortedConfig }) {
     return(
         <>
             <div className="table-responsive">
                 <table className="table table-bordered table-hover">
                     <thead className="table-light">
                         <tr>
-                            <th>Timestamp</th>
+                            <th 
+                                onClick={() => onSort('timestamp')} style={{ cursor: 'pointer' }}
+                            >
+                                Timestamp {sortedConfig.key === 'timestamp' ? (sortedConfig.direction === 'asc' ? '↑' : '↓') : ''}
+                            </th>
                             <th>Host</th>
                             <th>Serverity</th>
                             <th>Message</th>
