@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import SearchBar from "../../components/SearchBar";
 import LogTable from "../../components/LogTable";
+import Alerts from "../Alerts";
 
 import './dashboard.css';
 
@@ -67,8 +68,9 @@ export default function Dashboard() {
         <>
             <div className="dashboard">
                 <div className="mt-5 w-100">
-                    <h1 className="text-primary my-3">NetSearch Dashboard</h1>
+                    <h1 className="text-primary my-4"><strong>NetSearch Dashboard</strong></h1>
                     <SearchBar onSearch={handleSearch } />
+                    <Alerts />
                     <LogTable logs={sortedLogs} onSort={handleSort} sortedConfig={sortedConfig} />
                 </div>
             </div>
